@@ -5,6 +5,7 @@
 #define FRAME_NUM (10)
 #define PINS_IN_FRAME (10)
 #define NORMAL_FRAME_NUM (FRAME_NUM - 1)
+#define IDX_OF_LAST_FRAME (FRAME_NUM - 1)
 #define ROLL_IN_LAST_FRAME (3)
 #define ROLL_IN_NORMAL_FRAME (2)
 
@@ -86,12 +87,10 @@ static void UpdateGameProgress()
 
 static bool IsLastFrameFinished()
 {
-    bool isMarkAndThreeRolls = _countOfRollInFrame == 3;
-    bool isStrike = _pinNumTableOfLast[0] == PINS_IN_FRAME;
-    bool isSpare = !isStrike && (_pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME);
-    bool isNoMarkFinish = !isSpare && isSpare && _countOfRollInFrame >= 2;
-
-    return isMarkAndThreeRolls || isNoMarkFinish;
+    if (IsStrikeAt(IDX_OF_LAST_FRAME) || IsSpareAt(IDX_OF_LAST_FRAME))
+        return _countOfRollInFrame == 3;
+    
+    return _countOfFinishedFrame == 2;
 }
 
 static void GoNextFrame()
