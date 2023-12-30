@@ -25,7 +25,7 @@ static int ScoreOfLastFrame();
 static int GetPinNumOf(int frameIdx, int rollIdx);
 static void SetPinNum(int pinNum);
 
-static void UpdateRollStatus();
+static void UpdateGameProgress();
 static void GoNextFrame();
 static bool IsLastFrame(int frameIdx);
 
@@ -48,25 +48,37 @@ void Game_Init(void)
 void Game_Roll(int pinNum)
 {
     SetPinNum(pinNum);
-    UpdateRollStatus();
+    UpdateGameProgress();
 }
 
-static void UpdateRollStatus()
+int Game_Score(void)
 {
-    _countOfRollInFrame++;
+    int totalScore = 0;
+    for (int frameIdx = 0; frameIdx < FRAME_NUM; frameIdx++)
+    {
+        totalScore += ScoreOfFrame(frameIdx);
+    }
 
-    bool isFrameFinished = false;
+    return totalScore;
+}
 
+static bool IsCurrentFrameFinished()
+{
     if (IsLastFrame(_countOfFinishedFrame))
     {
-        isFrameFinished = IsLastFrameFinished();
+        return IsLastFrameFinished();
     }
     else
     {
-        isFrameFinished = IsStrikeAt(_countOfFinishedFrame) || _countOfRollInFrame == 2;
+        return IsStrikeAt(_countOfFinishedFrame) || _countOfRollInFrame == 2;
     }
+}
 
-    if (isFrameFinished)
+static void UpdateGameProgress()
+{
+    _countOfRollInFrame++;
+
+    if (IsCurrentFrameFinished())
     {
         GoNextFrame();
     }
@@ -86,17 +98,6 @@ static void GoNextFrame()
 {
     _countOfFinishedFrame++;
     _countOfRollInFrame = 0;
-}
-
-int Game_Score(void)
-{
-    int totalScore = 0;
-    for (int frameIdx = 0; frameIdx < FRAME_NUM; frameIdx++)
-    {
-        totalScore += ScoreOfFrame(frameIdx);
-    }
-
-    return totalScore;
 }
 
 /// @brief フレーム/インデックスを抽象化した、ピン数へのアクセサ

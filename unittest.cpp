@@ -5,10 +5,9 @@ TEST_GROUP(BowlingGameTestGroup){
     void RollMany(int pins, int n){
         for (int i = 0; i < n; i++){
             Game_Roll(pins);
-}
-}
-}
-;
+        }
+    }
+};
 
 TEST(BowlingGameTestGroup, TestAllGutter)
 {
