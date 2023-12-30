@@ -1,9 +1,10 @@
 #include <stdbool.h>
 #include "bowling.h"
 
-#define MAX_FRAME (10)
+#define FRAME_NUM (10)
+#define PINS_IN_FRAME (10)
 
-static int _pinNumTable[MAX_FRAME][2];
+static int _pinNumTable[FRAME_NUM][2];
 static int _countOfFinishedFrame = 0;
 static int _countOfRollInFrame = 0;
 
@@ -36,7 +37,7 @@ void Game_Roll(int pinNum)
 int Game_Score(void)
 {
     int totalScore = 0;
-    for (int i = 0; i < MAX_FRAME; i++)
+    for (int i = 0; i < FRAME_NUM; i++)
     {
         totalScore += ScoreOfFrame(i);
     }
@@ -48,7 +49,7 @@ static int ScoreOfFrame(int frameIdx)
 {
     int normalScore = _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1];
 
-    bool isSpare = normalScore == 10;
+    bool isSpare = normalScore == PINS_IN_FRAME;
     if (isSpare)
     {
         int bonusScore = _pinNumTable[frameIdx + 1][0];
