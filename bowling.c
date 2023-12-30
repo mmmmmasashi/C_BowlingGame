@@ -6,20 +6,25 @@
 #define PINS_IN_FRAME (10)
 #define NORMAL_FRAME_NUM (FRAME_NUM - 1)
 #define ROLL_IN_LAST_FRAME (3)
+#define ROLL_IN_NORMAL_FRAME (2)
 
-static int _pinNumTable[NORMAL_FRAME_NUM][2];      // 通常フレーム
-static int _pinNumTableOfLast[ROLL_IN_LAST_FRAME]; // 最終フレーム
+static int _pinNumTable[NORMAL_FRAME_NUM][ROLL_IN_NORMAL_FRAME]; // 通常フレーム
+static int _pinNumTableOfLast[ROLL_IN_LAST_FRAME];               // 最終フレーム
 static int _countOfFinishedFrame = 0;
 static int _countOfRollInFrame = 0;
 
-static int ScoreOfFrame(int frameIdx);
-static int ScoreOfLastFrame();
 static bool IsStrikeAt(int frameIdx);
 static bool IsSpareAt(int frameIdx);
+
+static bool IsLastFrameFinished();
+
+static int ScoreOfFrame(int frameIdx);
 static int ScoreOfNormalFrame(int frameIdx);
 static int ScoreOfLastFrame();
+
 static int GetPinNumOf(int frameIdx, int rollIdx);
-static void SetPinNumOf(int frameIdx, int rollIdx, int pinNum);
+static void SetPinNum(int frameIdx, int rollIdx, int pinNum);
+
 static void GoNextFrame();
 static bool IsLastFrame(int frameIdx);
 
@@ -41,18 +46,14 @@ void Game_Init(void)
 
 void Game_Roll(int pinNum)
 {
-    bool isFrameFinished = false;
-    SetPinNumOf(_countOfFinishedFrame, _countOfRollInFrame, pinNum);
+    SetPinNum(_countOfFinishedFrame, _countOfRollInFrame, pinNum);
     _countOfRollInFrame++;
+
+    bool isFrameFinished = false;
 
     if (IsLastFrame(_countOfFinishedFrame))
     {
-        bool isMarkAndThreeRolls = _countOfRollInFrame == 3;
-        bool isStrike = _pinNumTableOfLast[0] == PINS_IN_FRAME;
-        bool isSpare = !isStrike && (_pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME);
-        bool isNoMarkFinish = !isSpare && isSpare && _countOfRollInFrame >= 2;
-
-        isFrameFinished = isMarkAndThreeRolls || isNoMarkFinish;
+        isFrameFinished = IsLastFrameFinished();
     }
     else
     {
@@ -63,6 +64,16 @@ void Game_Roll(int pinNum)
     {
         GoNextFrame();
     }
+}
+
+static bool IsLastFrameFinished()
+{
+    bool isMarkAndThreeRolls = _countOfRollInFrame == 3;
+    bool isStrike = _pinNumTableOfLast[0] == PINS_IN_FRAME;
+    bool isSpare = !isStrike && (_pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME);
+    bool isNoMarkFinish = !isSpare && isSpare && _countOfRollInFrame >= 2;
+
+    return isMarkAndThreeRolls || isNoMarkFinish;
 }
 
 static void GoNextFrame()
@@ -90,7 +101,7 @@ static int GetPinNumOf(int frameIdx, int rollIdx)
     return _pinNumTable[frameIdx][rollIdx];
 }
 
-static void SetPinNumOf(int frameIdx, int rollIdx, int pinNum)
+static void SetPinNum(int frameIdx, int rollIdx, int pinNum)
 {
     if (IsLastFrame(frameIdx))
     {
