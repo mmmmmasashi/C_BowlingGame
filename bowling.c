@@ -18,6 +18,8 @@ static bool IsStrikeAt(int frameIdx);
 static bool IsSpareAt(int frameIdx);
 static int ScoreOfNormalFrame(int frameIdx);
 static int ScoreOfLastFrame();
+static int GetPinNumOf(int frameIdx, int rollIdx);
+static bool IsLastFrame(int frameIdx);
 
 void Game_Init(void)
 {
@@ -39,8 +41,7 @@ void Game_Roll(int pinNum)
 {
     bool isFrameFinished = false;
 
-    bool isLastFrame = _countOfFinishedFrame == NORMAL_FRAME_NUM;
-    if (isLastFrame)
+    if (IsLastFrame(_countOfFinishedFrame))
     {
         _pinNumTableOfLast[_countOfRollInFrame] = pinNum;
         _countOfRollInFrame++;
@@ -79,6 +80,14 @@ int Game_Score(void)
     return totalScore;
 }
 
+/// @brief フレーム/インデックスを抽象化した、ピン数へのアクセサ
+static int GetPinNumOf(int frameIdx, int rollIdx)
+{
+    if (IsLastFrame(frameIdx))
+        return _pinNumTableOfLast[rollIdx];
+    return _pinNumTable[frameIdx][rollIdx];
+}
+
 static bool IsLastFrame(int frameIdx)
 {
     int frameCount = frameIdx + 1;
@@ -87,10 +96,7 @@ static bool IsLastFrame(int frameIdx)
 
 static bool IsStrikeAt(int frameIdx)
 {
-    if (IsLastFrame(frameIdx))
-        return _pinNumTableOfLast[0] == PINS_IN_FRAME;
-
-    return _pinNumTable[frameIdx][0] == PINS_IN_FRAME;
+    return GetPinNumOf(frameIdx, 0) == PINS_IN_FRAME;
 }
 
 static bool IsSpareAt(int frameIdx)
@@ -98,14 +104,7 @@ static bool IsSpareAt(int frameIdx)
     if (IsStrikeAt(frameIdx))
         return false;
 
-    if (IsLastFrame(frameIdx))
-    {
-        return _pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME;
-    }
-    else
-    {
-        return _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1] == PINS_IN_FRAME;
-    }
+    return GetPinNumOf(frameIdx, 0) + GetPinNumOf(frameIdx, 1) == PINS_IN_FRAME;
 }
 
 static int ScoreOfFrame(int frameIdx)
@@ -126,6 +125,7 @@ static int ScoreOfNormalFrame(int frameIdx)
         int nextFrameIdx = frameIdx + 1;
         if (IsStrikeAt(nextFrameIdx))
         {
+            // 次フレームがStrikeの場合、更に次からボーナス用のピン数を取得する必要がある
             bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 2][0];
         }
         else
