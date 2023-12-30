@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/WorkSpace/cpractice/C_FizzBuzz",
-      "program": "c:/WorkSpace/cpractice/C_FizzBuzz/build/Debug/outDebug",
+      "cwd": "c:/WorkSpace/cpractice/C_BowlingGame",
+      "program": "c:/WorkSpace/cpractice/C_BowlingGame/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

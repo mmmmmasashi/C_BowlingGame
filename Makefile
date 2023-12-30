@@ -1,6 +1,6 @@
 # 参考 : https://news.mynavi.jp/techplus/article/c-for-windows-14/
-CMD=	fizzbuzz.exe
-SRCS=	main.c fizzbuzz.c
+CMD=	bowling.exe
+SRCS=	main.c bowling.c
 OBJS = $(patsubst %.c,bin/%.o,$(SRCS))
 
 CFLAGS+=-g

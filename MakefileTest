@@ -14,7 +14,7 @@ LDLIBS = -lCppUTest -lCppUTestExt
 TARGET = unittest.exe
 
 # Object files
-OBJS = test/unittest.o test/fizzbuzz.o
+OBJS = test/unittest.o test/bowling.o
 
 # Build target
 all: $(TARGET)
@@ -24,12 +24,12 @@ $(TARGET): $(OBJS) | test
 	$(CXX) -pthread $(LDFLAGS) $(OBJS) -o $(TARGET) $(LDLIBS)
 
 # Rule to compile the unittest source file
-test/unittest.o: unittest.cpp fizzbuzz.h | test
+test/unittest.o: unittest.cpp bowling.h | test
 	$(CXX) $(CXXFLAGS) -c unittest.cpp -o test/unittest.o
 
-# Rule to compile the fizzbuzz source file
-test/fizzbuzz.o: fizzbuzz.c fizzbuzz.h | test
-	$(CXX) $(CXXFLAGS) -c fizzbuzz.c -o test/fizzbuzz.o
+# Rule to compile the bowling source file
+test/bowling.o: bowling.c bowling.h | test
+	$(CXX) $(CXXFLAGS) -c bowling.c -o test/bowling.o
 
 test:
 	mkdir test
