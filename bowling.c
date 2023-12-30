@@ -23,8 +23,9 @@ static int ScoreOfNormalFrame(int frameIdx);
 static int ScoreOfLastFrame();
 
 static int GetPinNumOf(int frameIdx, int rollIdx);
-static void SetPinNum(int frameIdx, int rollIdx, int pinNum);
+static void SetPinNum(int pinNum);
 
+static void UpdateRollStatus();
 static void GoNextFrame();
 static bool IsLastFrame(int frameIdx);
 
@@ -46,7 +47,12 @@ void Game_Init(void)
 
 void Game_Roll(int pinNum)
 {
-    SetPinNum(_countOfFinishedFrame, _countOfRollInFrame, pinNum);
+    SetPinNum(pinNum);
+    UpdateRollStatus();
+}
+
+static void UpdateRollStatus()
+{
     _countOfRollInFrame++;
 
     bool isFrameFinished = false;
@@ -101,8 +107,10 @@ static int GetPinNumOf(int frameIdx, int rollIdx)
     return _pinNumTable[frameIdx][rollIdx];
 }
 
-static void SetPinNum(int frameIdx, int rollIdx, int pinNum)
+static void SetPinNum(int pinNum)
 {
+    int frameIdx = _countOfFinishedFrame;
+    int rollIdx = _countOfRollInFrame;
     if (IsLastFrame(frameIdx))
     {
         _pinNumTableOfLast[rollIdx] = pinNum;
