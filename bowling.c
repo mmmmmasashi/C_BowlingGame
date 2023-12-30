@@ -19,6 +19,8 @@ static bool IsSpareAt(int frameIdx);
 static int ScoreOfNormalFrame(int frameIdx);
 static int ScoreOfLastFrame();
 static int GetPinNumOf(int frameIdx, int rollIdx);
+static void SetPinNumOf(int frameIdx, int rollIdx, int pinNum);
+static void GoNextFrame();
 static bool IsLastFrame(int frameIdx);
 
 void Game_Init(void)
@@ -40,12 +42,11 @@ void Game_Init(void)
 void Game_Roll(int pinNum)
 {
     bool isFrameFinished = false;
+    SetPinNumOf(_countOfFinishedFrame, _countOfRollInFrame, pinNum);
+    _countOfRollInFrame++;
 
     if (IsLastFrame(_countOfFinishedFrame))
     {
-        _pinNumTableOfLast[_countOfRollInFrame] = pinNum;
-        _countOfRollInFrame++;
-
         bool isMarkAndThreeRolls = _countOfRollInFrame == 3;
         bool isStrike = _pinNumTableOfLast[0] == PINS_IN_FRAME;
         bool isSpare = !isStrike && (_pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME);
@@ -55,18 +56,19 @@ void Game_Roll(int pinNum)
     }
     else
     {
-        _pinNumTable[_countOfFinishedFrame][_countOfRollInFrame] = pinNum;
-        _countOfRollInFrame++;
-
-        bool isStrike = IsStrikeAt(_countOfFinishedFrame);
-        isFrameFinished = isStrike || _countOfRollInFrame == 2;
+        isFrameFinished = IsStrikeAt(_countOfFinishedFrame) || _countOfRollInFrame == 2;
     }
 
     if (isFrameFinished)
     {
-        _countOfFinishedFrame++;
-        _countOfRollInFrame = 0;
+        GoNextFrame();
     }
+}
+
+static void GoNextFrame()
+{
+    _countOfFinishedFrame++;
+    _countOfRollInFrame = 0;
 }
 
 int Game_Score(void)
@@ -86,6 +88,18 @@ static int GetPinNumOf(int frameIdx, int rollIdx)
     if (IsLastFrame(frameIdx))
         return _pinNumTableOfLast[rollIdx];
     return _pinNumTable[frameIdx][rollIdx];
+}
+
+static void SetPinNumOf(int frameIdx, int rollIdx, int pinNum)
+{
+    if (IsLastFrame(frameIdx))
+    {
+        _pinNumTableOfLast[rollIdx] = pinNum;
+    }
+    else
+    {
+        _pinNumTable[frameIdx][rollIdx] = pinNum;
+    }
 }
 
 static bool IsLastFrame(int frameIdx)
