@@ -5,9 +5,10 @@ TEST_GROUP(BowlingGameTestGroup){
     void RollMany(int pins, int n){
         for (int i = 0; i < n; i++){
             Game_Roll(pins);
-        }
-    }
-};
+}
+}
+}
+;
 
 TEST(BowlingGameTestGroup, TestAllGutter)
 {
@@ -40,6 +41,20 @@ TEST(BowlingGameTestGroup, TestSpare)
     CHECK_EQUAL(11 + 3, Game_Score());
 }
 
+TEST(BowlingGameTestGroup, TestStrike)
+{
+    Game_Init();
+
+    Game_Roll(10);
+
+    Game_Roll(1);
+    Game_Roll(2);
+
+    RollMany(0, 2 * 8);
+    CHECK_EQUAL(13 + 3, Game_Score());
+}
+
+// TODO:Last Frame
 int main(int ac, char **av)
 {
     return CommandLineTestRunner::RunAllTests(ac, av);

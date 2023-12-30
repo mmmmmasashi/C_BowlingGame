@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include "bowling.h"
 
 #define FRAME_NUM (10)
@@ -26,7 +27,9 @@ void Game_Roll(int pinNum)
     _pinNumTable[_countOfFinishedFrame][_countOfRollInFrame] = pinNum;
     _countOfRollInFrame++;
 
-    bool isFrameFinished = _countOfRollInFrame == 2;
+    bool isStrike = (_countOfRollInFrame == 1) && (pinNum == PINS_IN_FRAME);
+    bool isFrameFinished = isStrike || _countOfRollInFrame == 2;
+
     if (isFrameFinished)
     {
         _countOfFinishedFrame++;
@@ -37,9 +40,9 @@ void Game_Roll(int pinNum)
 int Game_Score(void)
 {
     int totalScore = 0;
-    for (int i = 0; i < FRAME_NUM; i++)
+    for (int frameIdx = 0; frameIdx < FRAME_NUM; frameIdx++)
     {
-        totalScore += ScoreOfFrame(i);
+        totalScore += ScoreOfFrame(frameIdx);
     }
 
     return totalScore;
@@ -49,8 +52,15 @@ static int ScoreOfFrame(int frameIdx)
 {
     int normalScore = _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1];
 
-    bool isSpare = normalScore == PINS_IN_FRAME;
-    if (isSpare)
+    bool isStrike = _pinNumTable[frameIdx][0] == PINS_IN_FRAME;
+    bool isSpare = !isStrike && normalScore == PINS_IN_FRAME;
+
+    if (isStrike)
+    {
+        int bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 1][1];
+        return normalScore + bonusScore;
+    }
+    else if (isSpare)
     {
         int bonusScore = _pinNumTable[frameIdx + 1][0];
         return normalScore + bonusScore;
