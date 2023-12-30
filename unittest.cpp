@@ -62,8 +62,18 @@ TEST(BowlingGameTestGroup, TestPerfectGame)
     CHECK_EQUAL(300, Game_Score());
 }
 
-// TODO:  Strike - Strike case
-//  TODO:Last Frame
+TEST(BowlingGameTestGroup, TestLastFrameSpareCase)
+{
+    Game_Init();
+
+    RollMany(0, 2 * 9);
+    Game_Roll(1);
+    Game_Roll(9);
+    Game_Roll(3);
+
+    CHECK_EQUAL(13, Game_Score());
+}
+
 int main(int ac, char **av)
 {
     return CommandLineTestRunner::RunAllTests(ac, av);
