@@ -13,8 +13,11 @@ static int _countOfFinishedFrame = 0;
 static int _countOfRollInFrame = 0;
 
 static int ScoreOfFrame(int frameIdx);
+static int ScoreOfLastFrame();
 static bool IsStrikeAt(int frameIdx);
 static bool IsSpareAt(int frameIdx);
+static int ScoreOfNormalFrame(int frameIdx);
+static int ScoreOfLastFrame();
 
 void Game_Init(void)
 {
@@ -76,8 +79,17 @@ int Game_Score(void)
     return totalScore;
 }
 
+static bool IsLastFrame(int frameIdx)
+{
+    int frameCount = frameIdx + 1;
+    return frameCount == FRAME_NUM;
+}
+
 static bool IsStrikeAt(int frameIdx)
 {
+    if (IsLastFrame(frameIdx))
+        return _pinNumTableOfLast[0] == PINS_IN_FRAME;
+
     return _pinNumTable[frameIdx][0] == PINS_IN_FRAME;
 }
 
@@ -85,43 +97,56 @@ static bool IsSpareAt(int frameIdx)
 {
     if (IsStrikeAt(frameIdx))
         return false;
-    return _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1] == PINS_IN_FRAME;
+
+    if (IsLastFrame(frameIdx))
+    {
+        return _pinNumTableOfLast[0] + _pinNumTableOfLast[1] == PINS_IN_FRAME;
+    }
+    else
+    {
+        return _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1] == PINS_IN_FRAME;
+    }
 }
 
 static int ScoreOfFrame(int frameIdx)
 {
-    bool isLastFrame = (frameIdx + 1) == FRAME_NUM;
+    if (IsLastFrame(frameIdx))
+        return ScoreOfLastFrame();
 
-    if (isLastFrame)
-    {
-        int sumOfPins = 0;
-        for (int i = 0; i < ROLL_IN_LAST_FRAME; i++)
-        {
-            sumOfPins += _pinNumTableOfLast[i];
-        }
-        return sumOfPins;
-    }
-    else
-    {
-        int normalScore = _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1];
-        int bonusScore = 0;
+    return ScoreOfNormalFrame(frameIdx);
+}
 
-        if (IsStrikeAt(frameIdx))
+static int ScoreOfNormalFrame(int frameIdx)
+{
+    int normalScore = _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1];
+    int bonusScore = 0;
+
+    if (IsStrikeAt(frameIdx))
+    {
+        int nextFrameIdx = frameIdx + 1;
+        if (IsStrikeAt(nextFrameIdx))
         {
-            int nextFrameIdx = frameIdx + 1;
-            if (IsStrikeAt(nextFrameIdx))
-            {
-                bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 2][0];
-            }
-            else
-            {
-                bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 1][1];
-            }
+            bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 2][0];
         }
-        else if (IsSpareAt(frameIdx))
+        else
         {
-            bonusScore = _pinNumTable[frameIdx + 1][0];
+            bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 1][1];
         }
-        return normalScore + bonusScore;
     }
+
+    else if (IsSpareAt(frameIdx))
+    {
+        bonusScore = _pinNumTable[frameIdx + 1][0];
+    }
+    return normalScore + bonusScore;
+}
+
+static int ScoreOfLastFrame()
+{
+    int sumOfPins = 0;
+    for (int i = 0; i < ROLL_IN_LAST_FRAME; i++)
+    {
+        sumOfPins += _pinNumTableOfLast[i];
+    }
+    return sumOfPins;
 }
