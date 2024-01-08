@@ -21,7 +21,8 @@ SRCS_TARGET = Bowling.c Frame.c
 SRCS_TEST = UnitTest.cpp BowlingTest.cpp FrameTest.cpp
 
 #Path list
-SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))
+SRCPATH_TARGET += $(patsubst %.c,src/%.c,$(SRCS_TARGET))
+SRCPATH_TARGET += $(patsubst %.c,src/%.h,$(SRCS_TARGET))
 SRCPATH_TEST = $(patsubst %,test/%,$(SRCS_TEST))
 
 # Object files
