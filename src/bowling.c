@@ -49,7 +49,12 @@ int Game_Score(Game self)
 
 void Game_Destroy(Game self)
 {
-    //TODO:
+    for (int i = 0; i < FRAME_NUM; i++)
+    {
+        IFrame each = self->frames[i];
+        each->Destroy(each);
+    }
+    
     free(self);
 }
 
