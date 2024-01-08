@@ -14,7 +14,10 @@ LDLIBS = -lCppUTest -lCppUTestExt
 # Target executable name
 TARGET = unittest.exe
 
+# ☆srcフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
 SRCS_TARGET = bowling.c
+
+# ☆testフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
 SRCS_TEST = unittest.cpp
 
 #Path list
@@ -22,26 +25,36 @@ SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))
 SRCPATH_TEST = $(patsubst %,test/%,$(SRCS_TEST))
 
 # Object files
-OBJS += $(patsubst %.c,%.o,$(SRCPATH_TARGET))
-OBJS += $(patsubst %.cpp,%.o,$(SRCPATH_TEST))
+OBJS += $(patsubst src/%.c,src/obj/%.o,$(SRCPATH_TARGET))
+OBJS += $(patsubst test/%.cpp,test/obj/%.o,$(SRCPATH_TEST))
 
 # Build target
 all: $(TARGET)
 
+TMP_DIR += test
+TMP_DIR += test/obj
+TMP_DIR += src/obj
+
 # Rule to link the program
-$(TARGET): $(OBJS) | test
+$(TARGET): $(OBJS) | $(TMP_DIR)
 	$(CXX) -pthread $(LDFLAGS) $(OBJS) -o $(TARGET) $(LDLIBS)
 
-test/obj/unittest.o: test/unittest.cpp src/bowling.h src/bowling.c | test
-	$(CXX) $(CXXFLAGS) -c test/unittest.cpp -o test/obj/unittest.o
+test/obj/%.o: test/%.cpp | $(TMP_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-test/obj/bowling.o: src/bowling.c src/bowling.h | test
-	$(CXX) $(CXXFLAGS) -c src/bowling.c -o test/obj/bowling.o
+src/obj/%.o: src/%.c | $(TMP_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 test:
 	mkdir test
 
-# Clean target
+test/obj:
+	mkdir test/obj
+
+src/obj:
+	mkdir src/obj
+
 clean:
 	rm -rf test/obj/*.o
+	rm -rf src/obj/*.o
 	rm  $(TARGET)
