@@ -4,6 +4,7 @@
 CXX = g++
 CXXFLAGS = -Wall
 CXXFLAGS += -I"$(CPPUTEST_HOME)/include"
+CXXFLAGS += -I"src"
 CXXFLAGS += -include "$(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h"
 CFLAGS += -include "$(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 
@@ -14,7 +15,7 @@ LDLIBS = -lCppUTest -lCppUTestExt
 TARGET = unittest.exe
 
 # Object files
-OBJS = test/unittest.o test/bowling.o
+OBJS = test/obj/unittest.o test/obj/bowling.o
 
 # Build target
 all: $(TARGET)
@@ -23,20 +24,16 @@ all: $(TARGET)
 $(TARGET): $(OBJS) | test
 	$(CXX) -pthread $(LDFLAGS) $(OBJS) -o $(TARGET) $(LDLIBS)
 
-# Rule to compile the unittest source file
-test/unittest.o: unittest.cpp bowling.h | test
-	$(CXX) $(CXXFLAGS) -c unittest.cpp -o test/unittest.o
+test/obj/unittest.o: test/unittest.cpp src/bowling.h src/bowling.c | test
+	$(CXX) $(CXXFLAGS) -c test/unittest.cpp -o test/obj/unittest.o
 
-# Rule to compile the bowling source file
-test/bowling.o: bowling.c bowling.h | test
-	$(CXX) $(CXXFLAGS) -c bowling.c -o test/bowling.o
+test/obj/bowling.o: src/bowling.c src/bowling.h | test
+	$(CXX) $(CXXFLAGS) -c src/bowling.c -o test/obj/bowling.o
 
 test:
 	mkdir test
 
 # Clean target
 clean:
-	rm -rf test/*.o
+	rm -rf test/obj/*.o
 	rm  $(TARGET)
-	del "test\*.o"
-	del "$(TARGET)"
