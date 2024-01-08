@@ -33,7 +33,13 @@ static int score(IFrame frame)
     return totalScore;
 }
 
-static IFrameStruct _vTable = { addPins, score };
+static void destroy(IFrame frame)
+{
+    StandardFrame standardFrame = (StandardFrame)frame;
+    free(standardFrame);
+}
+
+static IFrameStruct _vTable = { addPins, score, destroy};
 
 IFrame Frame_Create(void)
 {

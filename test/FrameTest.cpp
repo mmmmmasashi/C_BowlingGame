@@ -3,12 +3,20 @@
 
 TEST_GROUP(FrameTestGroup)
 {
+    IFrame frame;
+    void setup(void)
+    {
+        frame = Frame_Create();
+    }
 
+    void teardown(void)
+    {
+        frame->Destroy(frame);
+    }
 };
 
 TEST(FrameTestGroup, NoMark)
 {
-    IFrame frame = Frame_Create();
     bool isSuccess1st = frame->AddPins(frame, 2);
     CHECK_TRUE(isSuccess1st);
 
@@ -19,7 +27,6 @@ TEST(FrameTestGroup, NoMark)
 
 TEST(FrameTestGroup, OverRoll)
 {
-    IFrame frame = Frame_Create();
     frame->AddPins(frame, 0);
     frame->AddPins(frame, 0);
     
