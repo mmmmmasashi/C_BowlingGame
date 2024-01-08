@@ -15,10 +15,10 @@ LDLIBS = -lCppUTest -lCppUTestExt
 TARGET = UnitTest.exe
 
 # ☆srcフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TARGET = Bowling.c
+SRCS_TARGET = Bowling.c Frame.c
 
 # ☆testフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TEST = UnitTest.cpp BowlingTest.cpp
+SRCS_TEST = UnitTest.cpp BowlingTest.cpp FrameTest.cpp
 
 #Path list
 SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))
