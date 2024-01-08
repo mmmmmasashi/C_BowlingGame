@@ -35,12 +35,12 @@ Game Game_Create(void)
 void Game_Roll(Game self,int pinsNum)
 {
     IFrame currentFrame = getCurrentFrame(self);
-    bool success = currentFrame->AddPins(currentFrame, pinsNum);
+    currentFrame->AddPins(currentFrame, pinsNum);
 
-    if (success) return;
-    self->frameIdx++;
-    IFrame nextFrame = getCurrentFrame(self);
-    nextFrame->AddPins(nextFrame, pinsNum);
+    if (currentFrame->IsFilled(currentFrame))
+    {
+        self->frameIdx++;
+    }
 }
 
 int Game_Score(Game self)

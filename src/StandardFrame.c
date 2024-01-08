@@ -11,15 +11,22 @@ typedef struct StandardFrameStruct {
 } StandardFrameStruct;
 
 typedef struct StandardFrameStruct* StandardFrame;
-static bool addPins(IFrame frame, int pinNum)
+
+static bool isFilled(IFrame self)
+{
+    //TODO:Mark対応
+    StandardFrame frame = (StandardFrame)self;
+    return (frame->ballCount >= BALL_MAX);
+}
+
+static void addPins(IFrame frame, int pinNum)
 {
     StandardFrame standardFrame = (StandardFrame)frame;
-    if (standardFrame->ballCount >= BALL_MAX) return false;
+    if (standardFrame->ballCount >= BALL_MAX) return;
 
     int idx = standardFrame->ballCount;
     standardFrame->pinNums[idx] = pinNum;
     standardFrame->ballCount++;
-    return true;
 }
 
 static int score(IFrame frame)
@@ -40,7 +47,7 @@ static void destroy(IFrame frame)
     free(standardFrame);
 }
 
-static IFrameStruct _vTable = { addPins, score, destroy};
+static IFrameStruct _vTable = { isFilled, addPins, score, destroy};
 
 IFrame StandardFrame_Create(IFrame nextFrame)
 {

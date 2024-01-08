@@ -17,19 +17,18 @@ TEST_GROUP(FrameTestGroup)
 
 TEST(FrameTestGroup, NoMark)
 {
-    bool isSuccess1st = frame->AddPins(frame, 2);
-    CHECK_TRUE(isSuccess1st);
-
-    bool isSuccess2nd = frame->AddPins(frame, 3);
-    CHECK_TRUE(isSuccess2nd);
+    frame->AddPins(frame, 2);
+    frame->AddPins(frame, 3);
     CHECK_EQUAL(5, frame->Score(frame));
 }
 
 TEST(FrameTestGroup, OverRoll)
 {
-    CHECK_TRUE(frame->AddPins(frame, 0));
-    CHECK_TRUE(frame->AddPins(frame, 0));
-    CHECK_FALSE(frame->AddPins(frame, 0));
+    frame->AddPins(frame, 0);
+    CHECK_FALSE(frame->IsFilled(frame));
+
+    frame->AddPins(frame, 0);
+    CHECK_TRUE(frame->IsFilled(frame));
 }
 
 // IGNORE_TEST(FrameTestGroup, Spare)

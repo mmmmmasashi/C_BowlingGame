@@ -4,7 +4,8 @@
 #include <stdbool.h>
 
 typedef struct IFrameStruct {
-    bool (*AddPins)(IFrameStruct*, int pinNum);
+    bool (*IsFilled)(IFrameStruct*);
+    void (*AddPins)(IFrameStruct*, int pinNum);
     int (*Score)(IFrameStruct*);
     void (*Destroy)(IFrameStruct*);
 } IFrameStruct;
