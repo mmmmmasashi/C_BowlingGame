@@ -14,15 +14,13 @@ LDLIBS = -lCppUTest -lCppUTestExt
 # Target executable name
 TARGET = UnitTest.exe
 
-# ☆srcフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TARGET = Bowling.c
-
-# ☆testフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TEST = UnitTest.cpp BowlingTest.cpp
-
 #Path list
-SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))
-SRCPATH_TEST = $(patsubst %,test/%,$(SRCS_TEST))
+# srcフォルダ直下の*.c, *.hfileを自動的に対象にする
+SRC_HEADERS := $(wildcard src/*.h)
+SRCPATH_TARGET := $(wildcard src/*.c)
+
+# testフォルダ直下のcppfileも、単体テストコードとして自動的に対象にする
+SRCPATH_TEST = $(wildcard test/*.cpp)
 
 # Object files
 OBJS += $(patsubst src/%.c,src/obj/%.o,$(SRCPATH_TARGET))
@@ -36,7 +34,7 @@ TMP_DIR += test/obj
 TMP_DIR += src/obj
 
 # Rule to link the program
-$(TARGET): $(OBJS) | $(TMP_DIR)
+$(TARGET): $(OBJS) $(SRC_HEADERS) | $(TMP_DIR)
 	$(CXX) -pthread $(LDFLAGS) $(OBJS) -o $(TARGET) $(LDLIBS)
 
 test/obj/%.o: test/%.cpp | $(TMP_DIR)
