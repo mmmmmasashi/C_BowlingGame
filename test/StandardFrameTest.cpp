@@ -1,12 +1,12 @@
 #include "CppUTest/CommandLineTestRunner.h"
-#include "Frame.h"
+#include "StandardFrame.h"
 
 TEST_GROUP(FrameTestGroup)
 {
     IFrame frame;
     void setup(void)
     {
-        frame = Frame_Create();
+        frame = StandardFrame_Create();
     }
 
     void teardown(void)

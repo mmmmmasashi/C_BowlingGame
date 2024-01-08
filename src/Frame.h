@@ -11,6 +11,4 @@ typedef struct IFrameStruct {
 
 typedef IFrameStruct * IFrame;
 
-IFrame Frame_Create(void);
-
 #endif /* FRAME_H */

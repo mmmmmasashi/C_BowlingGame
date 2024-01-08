@@ -1,5 +1,5 @@
 #include "Bowling.h"
-#include "Frame.h"
+#include "StandardFrame.h"
 
 #include <stdlib.h>
 
@@ -18,7 +18,7 @@ Game Game_Create(void)
     game->frameIdx = 0;
     for (int i = 0; i < FRAME_NUM; i++)
     {
-        game->frames[i] = Frame_Create();
+        game->frames[i] = StandardFrame_Create();
     }
     
     return game;

@@ -41,7 +41,7 @@ static void destroy(IFrame frame)
 
 static IFrameStruct _vTable = { addPins, score, destroy};
 
-IFrame Frame_Create(void)
+IFrame StandardFrame_Create(void)
 {
     StandardFrameStruct* frame = (StandardFrameStruct*)calloc(1, sizeof(StandardFrameStruct));
     frame->base = _vTable;
