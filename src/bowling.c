@@ -3,9 +3,7 @@
 
 #include <stdlib.h>
 
-#define FRAME_NUM (10)
-#define FRAME_NUM_FIRST (1)
-#define FRAME_NUM_LAST (10)
+enum { FRAME_NUM = 10 };
 
 typedef struct GameStruct {
     IFrame frames[FRAME_NUM];
