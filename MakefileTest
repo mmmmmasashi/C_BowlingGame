@@ -14,8 +14,16 @@ LDLIBS = -lCppUTest -lCppUTestExt
 # Target executable name
 TARGET = unittest.exe
 
+SRCS_TARGET = bowling.c
+SRCS_TEST = unittest.cpp
+
+#Path list
+SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))
+SRCPATH_TEST = $(patsubst %,test/%,$(SRCS_TEST))
+
 # Object files
-OBJS = test/obj/unittest.o test/obj/bowling.o
+OBJS += $(patsubst %.c,%.o,$(SRCPATH_TARGET))
+OBJS += $(patsubst %.cpp,%.o,$(SRCPATH_TEST))
 
 # Build target
 all: $(TARGET)
