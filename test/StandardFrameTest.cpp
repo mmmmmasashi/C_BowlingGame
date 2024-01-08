@@ -27,8 +27,7 @@ TEST(FrameTestGroup, NoMark)
 
 TEST(FrameTestGroup, OverRoll)
 {
-    frame->AddPins(frame, 0);
-    frame->AddPins(frame, 0);
-    
+    CHECK_TRUE(frame->AddPins(frame, 0));
+    CHECK_TRUE(frame->AddPins(frame, 0));
     CHECK_FALSE(frame->AddPins(frame, 0));
 }
