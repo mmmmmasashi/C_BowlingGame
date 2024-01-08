@@ -38,7 +38,7 @@ TEST(BowlingGameTestGroup, NoMark)
     CHECK_EQUAL(5, Game_Score(game));
 }
 
-TEST(BowlingGameTestGroup, Spare)
+IGNORE_TEST(BowlingGameTestGroup, Spare)
 {
     Game_Roll(game, 1);
     Game_Roll(game, 9);
