@@ -37,3 +37,16 @@ TEST(BowlingGameTestGroup, NoMark)
 
     CHECK_EQUAL(5, Game_Score(game));
 }
+
+TEST(BowlingGameTestGroup, Spare)
+{
+    Game_Roll(game, 1);
+    Game_Roll(game, 9);
+
+    Game_Roll(game, 2);
+    Game_Roll(game, 3);
+
+    RollMany(0, 2 * 8);
+
+    CHECK_EQUAL(12 + 5, Game_Score(game));
+}

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 #define FRAME_NUM (10)
+#define FRAME_NUM_FIRST (1)
+#define FRAME_NUM_LAST (10)
 
 typedef struct GameStruct {
     IFrame frames[FRAME_NUM];
@@ -16,9 +18,15 @@ Game Game_Create(void)
 {
     Game game = (Game)malloc(sizeof(GameStruct));
     game->frameIdx = 0;
-    for (int i = 0; i < FRAME_NUM; i++)
+
+    IFrame nextFrame = StandardFrame_Create_TmpLast();
+    game->frames[FRAME_NUM - 1] = nextFrame;
+
+    /* nextFrameへのポインタを渡すために、後ろから初期化していく*/
+    for (int frameIdx = FRAME_NUM - 2; frameIdx >= 0; frameIdx--)
     {
-        game->frames[i] = StandardFrame_Create();
+        game->frames[frameIdx] = StandardFrame_Create(nextFrame);
+        nextFrame = game->frames[frameIdx];
     }
     
     return game;
