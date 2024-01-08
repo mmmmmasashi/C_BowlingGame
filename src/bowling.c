@@ -26,7 +26,7 @@ void Game_Roll(Game self,int pinsNum)
     bool success = currentFrame->AddPins(currentFrame, pinsNum);
 
     if (success) return;
-    self->frameIdx = self->frameIdx + 1;
+    self->frameIdx++;
     IFrame nextFrame = self->frames[self->frameIdx];
     nextFrame->AddPins(nextFrame, pinsNum);
 }

@@ -15,7 +15,7 @@ static bool addPins(IFrame frame, int pinNum)
 
     int idx = standardFrame->ballCount;
     standardFrame->pinNums[idx] = pinNum;
-    standardFrame->ballCount = standardFrame->ballCount + 1;
+    standardFrame->ballCount++;
     return true;
 }
 
