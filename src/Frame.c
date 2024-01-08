@@ -1,9 +1,11 @@
 #include "Frame.h"
 #include <stdbool.h>
 
+#define BALL_MAX (2)
+
 typedef struct StandardFrameStruct {
     IFrameStruct base;//ハマりメモ : ここは構造体。interfaceと同じデータ構造なので
-    int pinNums[2];
+    int pinNums[BALL_MAX];
     int ballCount;
 } StandardFrameStruct;
 
@@ -11,7 +13,7 @@ typedef struct StandardFrameStruct* StandardFrame;
 static bool addPins(IFrame frame, int pinNum)
 {
     StandardFrame standardFrame = (StandardFrame)frame;
-    if (standardFrame->ballCount >= 2) return false;
+    if (standardFrame->ballCount >= BALL_MAX) return false;
 
     int idx = standardFrame->ballCount;
     standardFrame->pinNums[idx] = pinNum;
@@ -37,8 +39,11 @@ IFrame Frame_Create(void)
 {
     StandardFrameStruct* frame = (StandardFrameStruct*)calloc(1, sizeof(StandardFrameStruct));
     frame->base = _vTable;
-    frame->pinNums[0] = 0;
-    frame->pinNums[1] = 0;
+    for (int i = 0; i < BALL_MAX; i++)
+    {
+        frame->pinNums[i] = 0;
+    }
+    
     frame->ballCount = 0;
     return (IFrame)frame;
 }

@@ -3,8 +3,10 @@
 
 #include <stdlib.h>
 
+#define FRAME_NUM (10)
+
 typedef struct GameStruct {
-    IFrame frames[10];
+    IFrame frames[FRAME_NUM];
     int frameIdx;
 } GameStruct;
 
@@ -12,7 +14,7 @@ Game Game_Create(void)
 {
     Game game = (Game)malloc(sizeof(GameStruct));
     game->frameIdx = 0;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < FRAME_NUM; i++)
     {
         game->frames[i] = Frame_Create();
     }
@@ -34,7 +36,7 @@ void Game_Roll(Game self,int pinsNum)
 int Game_Score(Game self)
 {
     int totalScore = 0;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < FRAME_NUM; i++)
     {
         IFrame frame = self->frames[i];
         totalScore += frame->Score(frame);
