@@ -4,13 +4,17 @@
 TEST_GROUP(FrameTestGroup)
 {
     IFrame frame;
+    IFrame nextFrame;
     void setup(void)
     {
-        frame = StandardFrame_Create_TmpLast();
+        nextFrame = StandardFrame_Create_TmpLast();
+        nextFrame->AddPins(nextFrame, 3);
+        frame = StandardFrame_Create(nextFrame);
     }
 
     void teardown(void)
     {
+        nextFrame->Destroy(nextFrame);
         frame->Destroy(frame);
     }
 };
@@ -31,10 +35,9 @@ TEST(FrameTestGroup, OverRoll)
     CHECK_TRUE(frame->IsFilled(frame));
 }
 
-// IGNORE_TEST(FrameTestGroup, Spare)
-// {
-//     frame->AddPins(frame, 1);
-//     frame->AddPins(frame, 9);
-//     IFrame nextFrame = StandardFrame_Create();
-//     nextFrame->Destroy(nextFrame);
-// }
+TEST(FrameTestGroup, Spare)
+{
+    frame->AddPins(frame, 1);
+    frame->AddPins(frame, 9);
+    CHECK_EQUAL(13 + 3, frame->Score(frame));
+}
