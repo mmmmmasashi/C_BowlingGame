@@ -10,6 +10,8 @@ typedef struct GameStruct {
     int frameIdx;
 } GameStruct;
 
+static IFrame getCurrentFrame(Game game);
+
 Game Game_Create(void)
 {
     Game game = (Game)malloc(sizeof(GameStruct));
@@ -24,12 +26,12 @@ Game Game_Create(void)
 
 void Game_Roll(Game self,int pinsNum)
 {
-    IFrame currentFrame = self->frames[self->frameIdx];
+    IFrame currentFrame = getCurrentFrame(self);
     bool success = currentFrame->AddPins(currentFrame, pinsNum);
 
     if (success) return;
     self->frameIdx++;
-    IFrame nextFrame = self->frames[self->frameIdx];
+    IFrame nextFrame = getCurrentFrame(self);
     nextFrame->AddPins(nextFrame, pinsNum);
 }
 
@@ -49,4 +51,9 @@ void Game_Destroy(Game self)
 {
     //TODO:
     free(self);
+}
+
+static IFrame getCurrentFrame(Game game)
+{
+    return game->frames[game->frameIdx];
 }
