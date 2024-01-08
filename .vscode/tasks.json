@@ -26,7 +26,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "./bowling",
+            "command": "./Bowling",
             "dependsOn": "build",
             "group": {
                 "kind": "test",
@@ -35,7 +35,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "./unittest -c -v",
+            "command": "./UnitTest -c -v",
             "dependsOn": "build-test",
             "group": {
                 "kind": "test",

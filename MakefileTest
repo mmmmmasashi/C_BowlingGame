@@ -1,4 +1,4 @@
-# Makefile for a C++ project with unittest
+# Makefile for a C++ project with UnitTest
 
 # Compiler settings
 CXX = g++
@@ -12,13 +12,13 @@ LDFLAGS = -L"$(CPPUTEST_HOME)/lib"
 LDLIBS = -lCppUTest -lCppUTestExt
 
 # Target executable name
-TARGET = unittest.exe
+TARGET = UnitTest.exe
 
 # ☆srcフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TARGET = bowling.c
+SRCS_TARGET = Bowling.c
 
 # ☆testフォルダ以下に追加したモジュール名をここに半角スペース区切りで追加していく
-SRCS_TEST = unittest.cpp
+SRCS_TEST = UnitTest.cpp
 
 #Path list
 SRCPATH_TARGET = $(patsubst %,src/%,$(SRCS_TARGET))

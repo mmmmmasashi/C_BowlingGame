@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "bowling.h"
+#include "Bowling.h"
 
 int main(void)
 {

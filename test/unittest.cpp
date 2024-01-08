@@ -1,5 +1,5 @@
 #include "CppUTest/CommandLineTestRunner.h"
-#include "bowling.h"
+#include "Bowling.h"
 
 TEST_GROUP(SampleTestGroup){};
 

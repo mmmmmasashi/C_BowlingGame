@@ -1,6 +1,6 @@
 # 参考 : https://news.mynavi.jp/techplus/article/c-for-windows-14/
-CMD=	bowling.exe
-SRCS=	main.c bowling.c
+CMD=	Bowling.exe
+SRCS=	main.c Bowling.c
 OBJS = $(patsubst %.c,bin/%.o,$(SRCS))
 
 CFLAGS+=-g
