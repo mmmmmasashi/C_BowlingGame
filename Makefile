@@ -27,7 +27,5 @@ bin:
 	mkdir bin
 
 clean:
-	del $(CMD)
-	del "bin\*.o"
-	del "bin\*.ilk"
-	del "bin\*.pdb"
+	rm -f $(CMD)
+	rm -f bin/*.o
