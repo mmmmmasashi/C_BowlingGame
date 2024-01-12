@@ -12,7 +12,7 @@ typedef struct {
 
 Frame* Frame_Create(void);
 void Frame_Destroy(Frame* frame);
-void Frame_AddPin(Frame* frame, int pinNum);
+void Frame_AddRoll(Frame* frame, int pinNum);
 int Frame_Score(const Frame* frame);
 bool Frame_IsFull(const Frame* frame);
 

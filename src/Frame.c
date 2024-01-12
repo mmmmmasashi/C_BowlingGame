@@ -19,7 +19,7 @@ void Frame_Destroy(Frame* frame)
 }
 
 
-void Frame_AddPin(Frame* frame, int pinNum)
+void Frame_AddRoll(Frame* frame, int pinNum)
 {
     int idx = frame->_ballCount;
     frame->_pinNums[idx] = pinNum;
