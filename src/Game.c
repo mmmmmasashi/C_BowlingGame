@@ -29,7 +29,7 @@ void Game_Roll(Game* game, int pinNum)
     Frame_AddPin(frameCurrent, pinNum);
 }
 
-int Game_Score(Game* game)
+int Game_Score(const Game* game)
 {
     int totalScore = 0;
     for (int i = 0; i < FRAME_NUM; i++)

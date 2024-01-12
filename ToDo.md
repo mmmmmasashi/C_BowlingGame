@@ -1,1 +1,1 @@
-- [ ] Scoreの引数をConstに
+- [x] Scoreの引数をConstに

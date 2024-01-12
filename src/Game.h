@@ -11,6 +11,6 @@ typedef struct{
 Game* Game_Create(void);
 void Game_Destroy(Game* game);
 void Game_Roll(Game* game, int pinNum);
-int Game_Score(Game* game);
+int Game_Score(const Game* game);
 
 #endif /* Game_H */
