@@ -92,6 +92,22 @@ TEST(GameTestGroup, Strike)
     CHECK_EQUAL(13 + 3, Game_Score(game));
 }
 
+TEST(GameTestGroup, CanRollThreeTimesInLastFrame)
+{
+    RollManyTimes(0, 2 * 9);
+
+    Game_Roll(game, 1);
+    Game_Roll(game, 9);
+    Game_Roll(game, 2);
+
+    CHECK_EQUAL(12, Game_Score(game));
+}
+
+IGNORE_TEST(GameTestGroup, PerfectGame)
+{
+    RollManyTimes(10, 12);
+    CHECK_EQUAL(300, Game_Score(game));
+}
 
 TEST(GameTestGroup, CanGetCurrentFrameNumber)
 {
