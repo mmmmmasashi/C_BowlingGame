@@ -43,8 +43,6 @@ TEST(GameTestGroup, NoMark)
 
 TEST(GameTestGroup, NoMark_2Frames)
 {
-    Game* game = Game_Create();
-
     Game_Roll(game, 1);
     Game_Roll(game, 2);
 
@@ -54,4 +52,15 @@ TEST(GameTestGroup, NoMark_2Frames)
     RollManyTimes(0, 2 * 8);
     
     CHECK_EQUAL(3 + 7, Game_Score(game));
+}
+
+TEST(GameTestGroup, CanGetCurrentFrameNumber)
+{
+    CHECK_EQUAL(1, Game_GetCurrentFrame(game));
+
+    Game_Roll(game, 1);
+    Game_Roll(game, 2);
+
+    CHECK_EQUAL(2, Game_GetCurrentFrame(game));
+
 }

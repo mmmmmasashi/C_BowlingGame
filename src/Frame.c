@@ -26,7 +26,7 @@ void Frame_AddPin(Frame* frame, int pinNum)
     frame->_ballCount++;
 }
 
-int Frame_Score(Frame* frame)
+int Frame_Score(const Frame* frame)
 {
     int frameScore = 0;
     for (int i = 0; i < FRAME_ROLL_MAX; i++)
@@ -36,3 +36,9 @@ int Frame_Score(Frame* frame)
 
     return frameScore;
 }
+
+bool Frame_IsFull(const Frame* frame)
+{
+    return (frame->_ballCount >= 2);
+}
+

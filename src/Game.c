@@ -8,7 +8,8 @@ Game* Game_Create(void)
     {
         game->_frames[i] = Frame_Create();
     }
-        
+    game->_currentFrameIdx = 0;
+
     return game;
 }
 
@@ -25,8 +26,14 @@ void Game_Destroy(Game* game)
 
 void Game_Roll(Game* game, int pinNum)
 {
-    Frame* frameCurrent = game->_frames[0];
+    Frame* frameCurrent = game->_frames[game->_currentFrameIdx];
     Frame_AddPin(frameCurrent, pinNum);
+    
+    //更新
+    if (Frame_IsFull(frameCurrent))
+    {
+        game->_currentFrameIdx++;
+    }
 }
 
 int Game_Score(const Game* game)
@@ -41,3 +48,7 @@ int Game_Score(const Game* game)
     return totalScore;
 }
 
+int Game_GetCurrentFrame(const Game* game)
+{
+    return game->_currentFrameIdx + 1;
+}
