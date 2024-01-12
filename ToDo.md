@@ -1,0 +1,1 @@
+- [ ] Scoreの引数をConstに

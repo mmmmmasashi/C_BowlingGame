@@ -13,6 +13,12 @@ Frame* Frame_Create(void)
     return frame;
 }
 
+void Frame_Destroy(Frame* frame)
+{
+    free(frame);
+}
+
+
 void Frame_AddPin(Frame* frame, int pinNum)
 {
     int idx = frame->_ballCount;

@@ -9,6 +9,7 @@ typedef struct {
 } Frame;
 
 Frame* Frame_Create(void);
+void Frame_Destroy(Frame* frame);
 void Frame_AddPin(Frame* frame, int pinNum);
 int Frame_Score(Frame* frame);
 

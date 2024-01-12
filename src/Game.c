@@ -1,3 +1,4 @@
+#include "stddef.h"
 #include "Game.h"
 
 Game* Game_Create(void)
@@ -13,6 +14,12 @@ Game* Game_Create(void)
 
 void Game_Destroy(Game* game)
 {
+    for (int i = 0; i < FRAME_NUM; i++)
+    {
+        Frame_Destroy(game->_frames[i]);
+        game->_frames[i] = NULL;
+    }
+    
     free(game);
 }
 
