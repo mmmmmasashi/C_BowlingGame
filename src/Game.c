@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#define FRAME_NUM (10)
-
 Game* Game_Create(void)
 {
     Game* game = (Game*)malloc(sizeof(Game));

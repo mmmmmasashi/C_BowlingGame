@@ -3,8 +3,8 @@
 Frame* Frame_Create(void)
 {
     Frame* frame = (Frame*)malloc(sizeof(Frame));
-    frame->_ballCount = 0;
 
+    frame->_ballCount = 0;
     for (int i = 0; i < FRAME_ROLL_MAX; i++)
     {
         frame->_pinNums[i] = 0;

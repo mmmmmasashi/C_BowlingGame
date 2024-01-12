@@ -3,8 +3,9 @@
 
 #include "Frame.h"
 
+enum { FRAME_NUM = 10 };
 typedef struct{
-    Frame* _frames[10];
+    Frame* _frames[FRAME_NUM];
 } Game;
 
 Game* Game_Create(void);
