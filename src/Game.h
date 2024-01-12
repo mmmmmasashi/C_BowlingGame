@@ -1,8 +1,10 @@
 #ifndef Game_H
 #define Game_H
 
+#include "Frame.h"
+
 typedef struct{
-    int ballCount;
+    Frame* _frames[10];
 } Game;
 
 Game* Game_Create(void);
