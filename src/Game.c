@@ -11,6 +11,11 @@ Game* Game_Create(void)
     return game;
 }
 
+void Game_Destroy(Game* game)
+{
+    free(game);
+}
+
 void Game_Roll(Game* game, int pinNum)
 {
     Frame* frameCurrent = game->_frames[0];

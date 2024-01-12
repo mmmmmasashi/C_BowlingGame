@@ -9,6 +9,12 @@ TEST_GROUP(GameTestGroup){
         game = Game_Create();
     }
 
+    void teardown(void)
+    {
+        Game_Destroy(game);
+        game = NULL;
+    }
+
     void RollManyTimes(int pinNum, int times)
     {
         for (int i = 0; i < times; i++)
