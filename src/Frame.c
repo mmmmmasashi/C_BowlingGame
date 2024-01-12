@@ -1,88 +1,27 @@
 #include <stddef.h>
 #include "Frame.h"
 
-static void initFrame(Frame* frame);
-static bool isStrike(const Frame* frame);
-static bool isSpare(const Frame* frame);
-static int sumOfAllPins(const Frame* frame);
-
-Frame* Frame_Create(void)
-{
-    Frame* frame = (Frame*)malloc(sizeof(Frame));
-    initFrame(frame);
-    return frame;
-}
-
 void Frame_TellNextFrame(Frame* frame, Frame* nextFrame)
 {
-    frame->_nextFrame = nextFrame;
+    frame->_funcTable->TellNextFrame(frame, nextFrame);
 }
 
 void Frame_Destroy(Frame* frame)
 {
-    free(frame);
+    frame->_funcTable->Destroy(frame);
 }
 
 void Frame_AddRoll(Frame* frame, int pinNum)
 {
-    int idx = frame->_ballCount;
-    frame->_pinNums[idx] = pinNum;
-    frame->_ballCount++;
+    frame->_funcTable->AddRoll(frame, pinNum);
 }
 
 int Frame_Score(const Frame* frame)
 {
-    int basicScore = sumOfAllPins(frame);
-
-    if (isStrike(frame))
-    {
-        int strikeBonus = frame->_nextFrame->_pinNums[0] + frame->_nextFrame->_pinNums[1];
-        return basicScore + strikeBonus;
-    }
-    else if (isSpare(frame))
-    {
-        int spareBonus = frame->_nextFrame->_pinNums[0];//次フレームの1投目
-        return basicScore + spareBonus;
-    }
-    else
-    {
-        return basicScore;
-    }
+    return frame->_funcTable->Score(frame);
 }
 
 bool Frame_IsFull(const Frame* frame)
 {
-    if (isStrike(frame)) return true;
-    return (frame->_ballCount >= 2);
-}
-
-static void initFrame(Frame* frame)
-{
-    frame->_ballCount = 0;
-    for (int i = 0; i < FRAME_ROLL_MAX; i++)
-    {
-        frame->_pinNums[i] = 0;
-    }
-    frame->_nextFrame = NULL;
-}
-
-static bool isStrike(const Frame* frame)
-{
-    return 10 == frame->_pinNums[0];
-}
-
-static bool isSpare(const Frame* frame)
-{
-    //TODO: strikeでもtrueになる
-    return 10 == sumOfAllPins(frame);
-}
-
-static int sumOfAllPins(const Frame* frame)
-{
-    int pinNumTotal = 0;
-    for (int i = 0; i < frame->_ballCount; i++)
-    {
-        pinNumTotal += frame->_pinNums[i];
-    }
-    return pinNumTotal;
+    return frame->_funcTable->IsFull(frame);
 }

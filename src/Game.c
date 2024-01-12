@@ -1,5 +1,6 @@
 #include "stddef.h"
 #include "Game.h"
+#include "StandardFrame.h"
 
 static void initGame(Game* game);
 static void destroyFrames(Game* game);
@@ -48,7 +49,7 @@ static void initGame(Game* game)
 {
     for (int i = 0; i < FRAME_NUM; i++)
     {
-        game->_frames[i] = Frame_Create();
+        game->_frames[i] = StandardFrame_Create();
     }
 
     for (int i = 0; i < FRAME_NUM - 1; i++)

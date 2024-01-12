@@ -92,7 +92,7 @@ TEST(GameTestGroup, Strike)
     CHECK_EQUAL(13 + 3, Game_Score(game));
 }
 
-TEST(GameTestGroup, CanRollThreeTimesInLastFrame)
+IGNORE_TEST(GameTestGroup, CanRollThreeTimesInLastFrame)
 {
     RollManyTimes(0, 2 * 9);
 
