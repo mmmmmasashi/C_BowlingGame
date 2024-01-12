@@ -80,6 +80,19 @@ TEST(GameTestGroup, SpareAnotherCase)
     CHECK_EQUAL(13 + 3, Game_Score(game));
 }
 
+TEST(GameTestGroup, Strike)
+{
+    Game_Roll(game, 10);
+
+    Game_Roll(game, 1);
+    Game_Roll(game, 2);
+
+    RollManyTimes(0, 2 * 8);
+    
+    CHECK_EQUAL(13 + 3, Game_Score(game));
+}
+
+
 TEST(GameTestGroup, CanGetCurrentFrameNumber)
 {
     CHECK_EQUAL(1, Game_GetCurrentFrameNumber(game));

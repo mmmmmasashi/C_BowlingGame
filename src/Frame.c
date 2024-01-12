@@ -2,6 +2,7 @@
 #include "Frame.h"
 
 static void initFrame(Frame* frame);
+static bool isStrike(const Frame* frame);
 static bool isSpare(const Frame* frame);
 static int sumOfAllPins(const Frame* frame);
 
@@ -33,7 +34,12 @@ int Frame_Score(const Frame* frame)
 {
     int basicScore = sumOfAllPins(frame);
 
-    if (isSpare(frame))
+    if (isStrike(frame))
+    {
+        int strikeBonus = frame->_nextFrame->_pinNums[0] + frame->_nextFrame->_pinNums[1];
+        return basicScore + strikeBonus;
+    }
+    else if (isSpare(frame))
     {
         int spareBonus = frame->_nextFrame->_pinNums[0];//次フレームの1投目
         return basicScore + spareBonus;
@@ -46,6 +52,7 @@ int Frame_Score(const Frame* frame)
 
 bool Frame_IsFull(const Frame* frame)
 {
+    if (isStrike(frame)) return true;
     return (frame->_ballCount >= 2);
 }
 
@@ -59,6 +66,11 @@ static void initFrame(Frame* frame)
     frame->_nextFrame = NULL;
 }
 
+static bool isStrike(const Frame* frame)
+{
+    return 10 == frame->_pinNums[0];
+}
+
 static bool isSpare(const Frame* frame)
 {
     //TODO: strikeでもtrueになる
@@ -68,7 +80,7 @@ static bool isSpare(const Frame* frame)
 static int sumOfAllPins(const Frame* frame)
 {
     int pinNumTotal = 0;
-    for (int i = 0; i < FRAME_ROLL_MAX; i++)
+    for (int i = 0; i < frame->_ballCount; i++)
     {
         pinNumTotal += frame->_pinNums[i];
     }
