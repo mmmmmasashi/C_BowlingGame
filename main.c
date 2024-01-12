@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Bowling.h"
+#include "Game.h"
 
 int main(void)
 {

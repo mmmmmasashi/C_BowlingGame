@@ -40,7 +40,7 @@ $(TARGET): $(OBJS) $(SRC_HEADERS) | $(TMP_DIR)
 test/obj/%.o: test/%.cpp | $(TMP_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-src/obj/%.o: src/%.c | $(TMP_DIR)
+src/obj/%.o: src/%.c src/%.h | $(TMP_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 test:

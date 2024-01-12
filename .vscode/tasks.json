@@ -26,7 +26,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "./Bowling",
+            "command": "./Game",
             "dependsOn": "build",
             "group": {
                 "kind": "test",
