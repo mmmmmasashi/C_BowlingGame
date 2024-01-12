@@ -54,6 +54,32 @@ TEST(GameTestGroup, NoMark_2Frames)
     CHECK_EQUAL(3 + 7, Game_Score(game));
 }
 
+TEST(GameTestGroup, Spare)
+{
+    Game_Roll(game, 1);
+    Game_Roll(game, 9);
+
+    Game_Roll(game, 2);
+    Game_Roll(game, 3);
+
+    RollManyTimes(0, 2 * 8);
+    
+    CHECK_EQUAL(12 + 5, Game_Score(game));
+}
+
+TEST(GameTestGroup, SpareAnotherCase)
+{
+    Game_Roll(game, 1);
+    Game_Roll(game, 9);
+
+    Game_Roll(game, 3);
+    Game_Roll(game, 0);
+
+    RollManyTimes(0, 2 * 8);
+    
+    CHECK_EQUAL(13 + 3, Game_Score(game));
+}
+
 TEST(GameTestGroup, CanGetCurrentFrameNumber)
 {
     CHECK_EQUAL(1, Game_GetCurrentFrameNumber(game));
@@ -62,5 +88,4 @@ TEST(GameTestGroup, CanGetCurrentFrameNumber)
     Game_Roll(game, 2);
 
     CHECK_EQUAL(2, Game_GetCurrentFrameNumber(game));
-
 }

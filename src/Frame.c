@@ -1,6 +1,8 @@
 #include "Frame.h"
 
 static void initFrame(Frame* frame);
+static bool isSpare(const Frame* frame);
+static int sumOfAllPins(const Frame* frame);
 
 Frame* Frame_Create(void)
 {
@@ -23,13 +25,17 @@ void Frame_AddRoll(Frame* frame, int pinNum)
 
 int Frame_Score(const Frame* frame)
 {
-    int frameScore = 0;
-    for (int i = 0; i < FRAME_ROLL_MAX; i++)
-    {
-        frameScore += frame->_pinNums[i];
-    }
+    int basicScore = sumOfAllPins(frame);
 
-    return frameScore;
+    if (isSpare(frame))
+    {
+        int spareBonus = 2;//TODO:仮実装中
+        return basicScore + spareBonus;
+    }
+    else
+    {
+        return basicScore;
+    }
 }
 
 bool Frame_IsFull(const Frame* frame)
@@ -44,4 +50,20 @@ static void initFrame(Frame* frame)
     {
         frame->_pinNums[i] = 0;
     }
+}
+
+static bool isSpare(const Frame* frame)
+{
+    //TODO: strikeでもtrueになる
+    return 10 == sumOfAllPins(frame);
+}
+
+static int sumOfAllPins(const Frame* frame)
+{
+    int pinNumTotal = 0;
+    for (int i = 0; i < FRAME_ROLL_MAX; i++)
+    {
+        pinNumTotal += frame->_pinNums[i];
+    }
+    return pinNumTotal;
 }
