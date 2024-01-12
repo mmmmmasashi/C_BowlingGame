@@ -1,15 +1,11 @@
 #include "Frame.h"
 
+static void initFrame(Frame* frame);
+
 Frame* Frame_Create(void)
 {
     Frame* frame = (Frame*)malloc(sizeof(Frame));
-
-    frame->_ballCount = 0;
-    for (int i = 0; i < FRAME_ROLL_MAX; i++)
-    {
-        frame->_pinNums[i] = 0;
-    }
-    
+    initFrame(frame);
     return frame;
 }
 
@@ -17,7 +13,6 @@ void Frame_Destroy(Frame* frame)
 {
     free(frame);
 }
-
 
 void Frame_AddRoll(Frame* frame, int pinNum)
 {
@@ -42,3 +37,11 @@ bool Frame_IsFull(const Frame* frame)
     return (frame->_ballCount >= 2);
 }
 
+static void initFrame(Frame* frame)
+{
+    frame->_ballCount = 0;
+    for (int i = 0; i < FRAME_ROLL_MAX; i++)
+    {
+        frame->_pinNums[i] = 0;
+    }
+}

@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 
-//TODO:変更
 enum { FRAME_ROLL_MAX = 2 };
 typedef struct {
     int _pinNums[FRAME_ROLL_MAX];
