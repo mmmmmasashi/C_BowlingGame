@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "Frame.h"
 
 static void initFrame(Frame* frame);
@@ -9,6 +10,11 @@ Frame* Frame_Create(void)
     Frame* frame = (Frame*)malloc(sizeof(Frame));
     initFrame(frame);
     return frame;
+}
+
+void Frame_TellNextFrame(Frame* frame, Frame* nextFrame)
+{
+    frame->_nextFrame = nextFrame;
 }
 
 void Frame_Destroy(Frame* frame)
@@ -29,7 +35,7 @@ int Frame_Score(const Frame* frame)
 
     if (isSpare(frame))
     {
-        int spareBonus = 2;//TODO:仮実装中
+        int spareBonus = frame->_nextFrame->_pinNums[0];//次フレームの1投目
         return basicScore + spareBonus;
     }
     else
@@ -50,6 +56,7 @@ static void initFrame(Frame* frame)
     {
         frame->_pinNums[i] = 0;
     }
+    frame->_nextFrame = NULL;
 }
 
 static bool isSpare(const Frame* frame)

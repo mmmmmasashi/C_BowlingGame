@@ -50,6 +50,12 @@ static void initGame(Game* game)
     {
         game->_frames[i] = Frame_Create();
     }
+
+    for (int i = 0; i < FRAME_NUM - 1; i++)
+    {
+        Frame_TellNextFrame(game->_frames[i], game->_frames[i + 1]);
+    }
+
     game->_currentFrameIdx = 0;
 }
 
