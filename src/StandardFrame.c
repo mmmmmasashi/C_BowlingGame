@@ -3,6 +3,8 @@
 #include "StandardFrame.h"
 #include "Frame.h"
 
+enum { FRAME_ROLL_MAX = 2 };
+
 typedef struct {
     FrameInterface* _funcTable;/* 必ず先頭に置く */
     int _pinNums[FRAME_ROLL_MAX];
@@ -16,6 +18,8 @@ static void destroy(Frame* frame);
 static void addRoll(Frame* frame, int pinNum);
 static int score(const Frame* frame);
 static bool isFull(const Frame* frame);
+static int bonusForSpare(const Frame* frame);
+static int bonusForStrike(const Frame* frame);
 
 /* 内部のヘルパー関数 */
 static void initFrame(StandardFrame* frame);
@@ -29,6 +33,8 @@ static FrameInterface standardFuncTable = {
     addRoll,
     score,
     isFull,
+    bonusForSpare,
+    bonusForStrike,
 };
 
 Frame* StandardFrame_Create(void)
@@ -62,18 +68,17 @@ static void addRoll(Frame* frame, int pinNum)
 static int score(const Frame* frame)
 {
     StandardFrame* standardFrame = (StandardFrame*)frame;
+    Frame* nextFrame = standardFrame->_nextFrame;
 
     int basicScore = sumOfAllPins(standardFrame);
 
     if (isStrike(standardFrame))
     {
-        int strikeBonus = standardFrame->_nextFrame->_pinNums[0] + standardFrame->_nextFrame->_pinNums[1];
-        return basicScore + strikeBonus;
+        return basicScore + Frame_BonusForStrike(nextFrame);
     }
     else if (isSpare(standardFrame))
     {
-        int spareBonus = frame->_nextFrame->_pinNums[0];//次フレームの1投目
-        return basicScore + spareBonus;
+        return basicScore + Frame_BonusForSpare(nextFrame);
     }
     else
     {
@@ -87,6 +92,18 @@ static bool isFull(const Frame* frame)
 
     if (isStrike(standardFrame)) return true;
     return (standardFrame->_ballCount >= 2);
+}
+
+static int bonusForSpare(const Frame* frame)
+{
+    StandardFrame* standardFrame = (StandardFrame*)frame;
+    return standardFrame->_pinNums[0];
+}
+
+static int bonusForStrike(const Frame* frame)
+{
+    StandardFrame* standardFrame = (StandardFrame*)frame;
+    return standardFrame->_pinNums[0] + standardFrame->_pinNums[1];
 }
 
 static void initFrame(StandardFrame* frame)

@@ -25,3 +25,13 @@ bool Frame_IsFull(const Frame* frame)
 {
     return frame->_funcTable->IsFull(frame);
 }
+
+int Frame_BonusForSpare(const Frame* frame)
+{
+    return frame->_funcTable->BonusForSpare(frame);
+}
+
+int Frame_BonusForStrike(const Frame* frame)
+{
+    return frame->_funcTable->BonusForStrike(frame);
+}
