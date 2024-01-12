@@ -13,6 +13,6 @@ Game* Game_Create(void);
 void Game_Destroy(Game* game);
 void Game_Roll(Game* game, int pinNum);
 int Game_Score(const Game* game);
-int Game_GetCurrentFrame(const Game* game);
+int Game_GetCurrentFrameNumber(const Game* game);
 
 #endif /* Game_H */

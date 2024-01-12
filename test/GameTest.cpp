@@ -56,11 +56,11 @@ TEST(GameTestGroup, NoMark_2Frames)
 
 TEST(GameTestGroup, CanGetCurrentFrameNumber)
 {
-    CHECK_EQUAL(1, Game_GetCurrentFrame(game));
+    CHECK_EQUAL(1, Game_GetCurrentFrameNumber(game));
 
     Game_Roll(game, 1);
     Game_Roll(game, 2);
 
-    CHECK_EQUAL(2, Game_GetCurrentFrame(game));
+    CHECK_EQUAL(2, Game_GetCurrentFrameNumber(game));
 
 }
