@@ -13,19 +13,17 @@ Game* GameFactory_Create(void)
 
 static void initGame(Game* game)
 {
-    //1-9は通常フレーム作成, 10フレームはFinalFrameを追加
-    int i;
-    for (i = 0; i < FRAME_NUM - 1; i++)
-    {
-        game->_frames[i] = StandardFrame_Create();
-    }
-    game->_frames[i] = FinalFrame_Create();
+    //次フレームへの参照を持たせるために、最終フレームから1フレームまでの
+    //逆順で生成する
 
-    //1-9フレームには、次のフレームへの参照を渡す
-    for (int i = 0; i < FRAME_NUM - 1; i++)
-    {
-        StandardFrame_TellNextFrame((StandardFrame*)(game->_frames[i]), game->_frames[i + 1]);
-    }
+    int frameIdx = FRAME_NUM - 1;//最終フレーム
+    game->_frames[frameIdx] = FinalFrame_Create();
+    frameIdx--;
 
+    for (; frameIdx >= 0; frameIdx--)
+    {
+        Frame* nextFrame = game->_frames[frameIdx + 1];
+        game->_frames[frameIdx] = StandardFrame_Create(nextFrame);
+    }
     game->_currentFrameIdx = 0;
 }

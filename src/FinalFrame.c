@@ -48,7 +48,6 @@ static void destroy(Frame* frame)
 
 static void addRoll(Frame* frame, int pinNum)
 {
-    printf("*");
     FinalFrame* finalFrame = (FinalFrame*)frame;
 
     int idx = finalFrame->_ballCount;

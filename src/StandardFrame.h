@@ -5,7 +5,6 @@
 
 typedef struct StandardFrameStruct StandardFrame;
 
-Frame* StandardFrame_Create(void);
-void StandardFrame_TellNextFrame(StandardFrame* frame, Frame* nextFrame);
+Frame* StandardFrame_Create(Frame* nextFrame);
 
 #endif /* STANDARD_FRAME_H */

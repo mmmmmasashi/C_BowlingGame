@@ -1,5 +1,3 @@
-#include <stddef.h>
-
 #include "StandardFrame.h"
 #include "Frame.h"
 
@@ -9,7 +7,7 @@ typedef struct StandardFrameStruct{
     FrameInterface* _funcTable;/* 必ず先頭に置く */
     int _pinNums[FRAME_ROLL_MAX];
     int _ballCount;
-    Frame* _nextFrame;
+    const Frame* _nextFrame;
 } StandardFrame;
 
 /* Frameモジュールから呼ばれるinterface実装関数*/
@@ -21,7 +19,7 @@ static int bonusForSpare(const Frame* frame);
 static int bonusForStrike(const Frame* frame);
 
 /* 内部のヘルパー関数 */
-static void initFrame(StandardFrame* frame);
+static void initFrame(StandardFrame* frame, const Frame* nextFrame);
 static bool isStrike(const StandardFrame* frame);
 static bool isSpare(const StandardFrame* frame);
 static int sumOfAllPins(const StandardFrame* frame);
@@ -35,18 +33,13 @@ static FrameInterface finalFrameFuncTable = {
     bonusForStrike,
 };
 
-Frame* StandardFrame_Create(void)
+Frame* StandardFrame_Create(Frame* nextFrame)
 {
     StandardFrame* frame = (StandardFrame*)malloc(sizeof(StandardFrame));
-    initFrame(frame);
+    initFrame(frame, nextFrame);
     return (Frame*)frame;
 }
 
-void StandardFrame_TellNextFrame(StandardFrame* frame, Frame* nextFrame)
-{
-    StandardFrame* standardFrame = (StandardFrame*)frame;
-    standardFrame->_nextFrame = nextFrame;
-}
 
 static void destroy(Frame* frame)
 {
@@ -66,7 +59,7 @@ static void addRoll(Frame* frame, int pinNum)
 static int score(const Frame* frame)
 {
     StandardFrame* standardFrame = (StandardFrame*)frame;
-    Frame* nextFrame = standardFrame->_nextFrame;
+    const Frame* nextFrame = standardFrame->_nextFrame;
 
     int basicScore = sumOfAllPins(standardFrame);
 
@@ -104,7 +97,7 @@ static int bonusForStrike(const Frame* frame)
     return standardFrame->_pinNums[0] + standardFrame->_pinNums[1];
 }
 
-static void initFrame(StandardFrame* frame)
+static void initFrame(StandardFrame* frame, const Frame* nextFrame)
 {
     frame->_funcTable = &finalFrameFuncTable;
     frame->_ballCount = 0;
@@ -112,7 +105,8 @@ static void initFrame(StandardFrame* frame)
     {
         frame->_pinNums[i] = 0;
     }
-    frame->_nextFrame = NULL;
+    
+    frame->_nextFrame = nextFrame;
 }
 
 static bool isStrike(const StandardFrame* frame)
