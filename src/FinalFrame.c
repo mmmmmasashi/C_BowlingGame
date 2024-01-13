@@ -50,51 +50,51 @@ static void tellNextFrame(Frame* frame, Frame* nextFrame)
 
 static void destroy(Frame* frame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
-    free(standardFrame);
+    FinalFrame* finalFrame = (FinalFrame*)frame;
+    free(finalFrame);
 }
 
 static void addRoll(Frame* frame, int pinNum)
 {
     printf("*");
-    FinalFrame* standardFrame = (FinalFrame*)frame;
+    FinalFrame* finalFrame = (FinalFrame*)frame;
 
-    int idx = standardFrame->_ballCount;
-    standardFrame->_pinNums[idx] = pinNum;
-    standardFrame->_ballCount++;
+    int idx = finalFrame->_ballCount;
+    finalFrame->_pinNums[idx] = pinNum;
+    finalFrame->_ballCount++;
 }
 
 static int score(const Frame* frame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
-    return sumOfAllPins(standardFrame);
+    FinalFrame* finalFrame = (FinalFrame*)frame;
+    return sumOfAllPins(finalFrame);
 }
 
 static bool isFull(const Frame* frame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
+    FinalFrame* finalFrame = (FinalFrame*)frame;
 
-    if (standardFrame->_ballCount == 0) return false;
-    if (standardFrame->_ballCount == 1) return false;
-    if (standardFrame->_ballCount == 2)
+    if (finalFrame->_ballCount == 0) return false;
+    if (finalFrame->_ballCount == 1) return false;
+    if (finalFrame->_ballCount == 2)
     {
-        if (isStrike(standardFrame)) return false;
-        if (isSpare(standardFrame)) return false;
+        if (isStrike(finalFrame)) return false;
+        if (isSpare(finalFrame)) return false;
     }
-    
+
     return true;
 }
 
 static int bonusForSpare(const Frame* frame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
-    return standardFrame->_pinNums[0];
+    FinalFrame* finalFrame = (FinalFrame*)frame;
+    return finalFrame->_pinNums[0];
 }
 
 static int bonusForStrike(const Frame* frame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
-    return standardFrame->_pinNums[0] + standardFrame->_pinNums[1];
+    FinalFrame* finalFrame = (FinalFrame*)frame;
+    return finalFrame->_pinNums[0] + finalFrame->_pinNums[1];
 }
 
 static void initFrame(FinalFrame* frame)
