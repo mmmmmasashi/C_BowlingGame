@@ -1,7 +1,7 @@
 # Todo
 - [x] Scoreの引数をConstに
 - [x] 最終フレームに対応
-- [ ] GameFactoryを作る
+- [x] GameFactoryを作って生成処理を分離
 - [ ] IGNORE対応
 - [x] 次フレームをセットするのはStandardFrameだけでは。共通IFの仕事ではない。
 - [ ] 同じ実装多そう。継承するか？
