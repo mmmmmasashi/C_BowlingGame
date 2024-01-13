@@ -73,7 +73,16 @@ static int score(const Frame* frame)
 static bool isFull(const Frame* frame)
 {
     FinalFrame* standardFrame = (FinalFrame*)frame;
-    return (standardFrame->_ballCount == 3);
+
+    if (standardFrame->_ballCount == 0) return false;
+    if (standardFrame->_ballCount == 1) return false;
+    if (standardFrame->_ballCount == 2)
+    {
+        if (isStrike(standardFrame)) return false;
+        if (isSpare(standardFrame)) return false;
+    }
+    
+    return true;
 }
 
 static int bonusForSpare(const Frame* frame)
