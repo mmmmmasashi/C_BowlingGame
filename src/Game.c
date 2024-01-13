@@ -1,6 +1,7 @@
 #include "stddef.h"
 #include "Game.h"
 #include "StandardFrame.h"
+#include "FinalFrame.h"
 
 static void initGame(Game* game);
 static void destroyFrames(Game* game);
@@ -47,10 +48,12 @@ int Game_GetCurrentFrameNumber(const Game* game)
 
 static void initGame(Game* game)
 {
-    for (int i = 0; i < FRAME_NUM; i++)
+    for (int i = 0; i < FRAME_NUM - 1; i++)
     {
         game->_frames[i] = StandardFrame_Create();
     }
+
+    game->_frames[FRAME_NUM - 1] = FinalFrame_Create();
 
     for (int i = 0; i < FRAME_NUM - 1; i++)
     {
