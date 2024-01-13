@@ -1,5 +1,6 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "Game.h"
+#include "GameFactory.h"
 
 TEST_GROUP(GameTestGroup){
     
@@ -7,7 +8,7 @@ TEST_GROUP(GameTestGroup){
     
     void setup(void)
     {
-        game = Game_Create();
+        game = GameFactory_Create();
     }
 
     void teardown(void)

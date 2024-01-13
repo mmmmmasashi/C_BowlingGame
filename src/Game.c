@@ -3,19 +3,11 @@
 #include "StandardFrame.h"
 #include "FinalFrame.h"
 
-static void initGame(Game* game);
 static void destroyFrames(Game* game);
 static Frame* getCurrentFrame(const Game* game);
 static int scoreOfFrameAt(const Game* game, int frameIdx);
 static void addRollToCurrentFrame(Game* game, int pinNum);
 static void goNextFrameIfIsFull(Game* game);
-
-Game* Game_Create(void)
-{
-    Game* game = (Game*)malloc(sizeof(Game));
-    initGame(game);
-    return game;
-}
 
 void Game_Destroy(Game* game)
 {
@@ -44,23 +36,6 @@ int Game_Score(const Game* game)
 int Game_GetCurrentFrameNumber(const Game* game)
 {
     return game->_currentFrameIdx + 1;
-}
-
-static void initGame(Game* game)
-{
-    for (int i = 0; i < FRAME_NUM - 1; i++)
-    {
-        game->_frames[i] = StandardFrame_Create();
-    }
-
-    game->_frames[FRAME_NUM - 1] = FinalFrame_Create();
-
-    for (int i = 0; i < FRAME_NUM - 1; i++)
-    {
-        StandardFrame_TellNextFrame((StandardFrame*)(game->_frames[i]), game->_frames[i + 1]);
-    }
-
-    game->_currentFrameIdx = 0;
 }
 
 static void destroyFrames(Game* game)

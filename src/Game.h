@@ -9,7 +9,6 @@ typedef struct{
     int _currentFrameIdx;
 } Game;
 
-Game* Game_Create(void);
 void Game_Destroy(Game* game);
 void Game_Roll(Game* game, int pinNum);
 int Game_Score(const Game* game);
