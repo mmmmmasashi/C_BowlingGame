@@ -2,13 +2,12 @@
 
 #include "FinalFrame.h"
 
-enum { FRAME_ROLL_MAX = 2 };
+enum { FRAME_ROLL_MAX = 3 };
 
 typedef struct {
     FrameInterface* _funcTable;/* 必ず先頭に置く */
     int _pinNums[FRAME_ROLL_MAX];
     int _ballCount;
-    Frame* _nextFrame;
 } FinalFrame;
 
 /* Frameモジュールから呼ばれるinterface実装関数*/
@@ -26,7 +25,7 @@ static bool isStrike(const FinalFrame* frame);
 static bool isSpare(const FinalFrame* frame);
 static int sumOfAllPins(const FinalFrame* frame);
 
-static FrameInterface standardFuncTable = {
+static FrameInterface finalFrameFuncTable = {
     tellNextFrame,
     destroy,
     addRoll,
@@ -45,8 +44,8 @@ Frame* FinalFrame_Create(void)
 
 static void tellNextFrame(Frame* frame, Frame* nextFrame)
 {
-    FinalFrame* standardFrame = (FinalFrame*)frame;
-    standardFrame->_nextFrame = nextFrame;
+    //do nothing
+    //TODO:このIFがあるのが不自然。Interface構造体から削除する予定
 }
 
 static void destroy(Frame* frame)
@@ -57,6 +56,7 @@ static void destroy(Frame* frame)
 
 static void addRoll(Frame* frame, int pinNum)
 {
+    printf("*");
     FinalFrame* standardFrame = (FinalFrame*)frame;
 
     int idx = standardFrame->_ballCount;
@@ -67,30 +67,13 @@ static void addRoll(Frame* frame, int pinNum)
 static int score(const Frame* frame)
 {
     FinalFrame* standardFrame = (FinalFrame*)frame;
-    Frame* nextFrame = standardFrame->_nextFrame;
-
-    int basicScore = sumOfAllPins(standardFrame);
-
-    if (isStrike(standardFrame))
-    {
-        return basicScore + Frame_BonusForStrike(nextFrame);
-    }
-    else if (isSpare(standardFrame))
-    {
-        return basicScore + Frame_BonusForSpare(nextFrame);
-    }
-    else
-    {
-        return basicScore;
-    }
+    return sumOfAllPins(standardFrame);
 }
 
 static bool isFull(const Frame* frame)
 {
     FinalFrame* standardFrame = (FinalFrame*)frame;
-
-    if (isStrike(standardFrame)) return true;
-    return (standardFrame->_ballCount >= 2);
+    return (standardFrame->_ballCount == 3);
 }
 
 static int bonusForSpare(const Frame* frame)
@@ -107,13 +90,12 @@ static int bonusForStrike(const Frame* frame)
 
 static void initFrame(FinalFrame* frame)
 {
-    frame->_funcTable = &standardFuncTable;
+    frame->_funcTable = &finalFrameFuncTable;
     frame->_ballCount = 0;
     for (int i = 0; i < FRAME_ROLL_MAX; i++)
     {
         frame->_pinNums[i] = 0;
     }
-    frame->_nextFrame = NULL;
 }
 
 static bool isStrike(const FinalFrame* frame)

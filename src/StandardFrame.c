@@ -27,7 +27,7 @@ static bool isStrike(const StandardFrame* frame);
 static bool isSpare(const StandardFrame* frame);
 static int sumOfAllPins(const StandardFrame* frame);
 
-static FrameInterface standardFuncTable = {
+static FrameInterface finalFrameFuncTable = {
     tellNextFrame,
     destroy,
     addRoll,
@@ -108,7 +108,7 @@ static int bonusForStrike(const Frame* frame)
 
 static void initFrame(StandardFrame* frame)
 {
-    frame->_funcTable = &standardFuncTable;
+    frame->_funcTable = &finalFrameFuncTable;
     frame->_ballCount = 0;
     for (int i = 0; i < FRAME_ROLL_MAX; i++)
     {
