@@ -57,7 +57,7 @@ static void initGame(Game* game)
 
     for (int i = 0; i < FRAME_NUM - 1; i++)
     {
-        Frame_TellNextFrame(game->_frames[i], game->_frames[i + 1]);
+        StandardFrame_TellNextFrame((StandardFrame*)(game->_frames[i]), game->_frames[i + 1]);
     }
 
     game->_currentFrameIdx = 0;

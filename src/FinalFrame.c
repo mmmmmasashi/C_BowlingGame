@@ -11,7 +11,6 @@ typedef struct {
 } FinalFrame;
 
 /* Frameモジュールから呼ばれるinterface実装関数*/
-static void tellNextFrame(Frame* frame, Frame* nextFrame);
 static void destroy(Frame* frame);
 static void addRoll(Frame* frame, int pinNum);
 static int score(const Frame* frame);
@@ -26,7 +25,6 @@ static bool isSpare(const FinalFrame* frame);
 static int sumOfAllPins(const FinalFrame* frame);
 
 static FrameInterface finalFrameFuncTable = {
-    tellNextFrame,
     destroy,
     addRoll,
     score,
@@ -40,12 +38,6 @@ Frame* FinalFrame_Create(void)
     FinalFrame* frame = (FinalFrame*)malloc(sizeof(FinalFrame));
     initFrame(frame);
     return (Frame*)frame;
-}
-
-static void tellNextFrame(Frame* frame, Frame* nextFrame)
-{
-    //do nothing
-    //TODO:このIFがあるのが不自然。Interface構造体から削除する予定
 }
 
 static void destroy(Frame* frame)

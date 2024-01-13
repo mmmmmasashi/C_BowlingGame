@@ -5,7 +5,7 @@
 
 enum { FRAME_ROLL_MAX = 2 };
 
-typedef struct {
+typedef struct StandardFrameStruct{
     FrameInterface* _funcTable;/* 必ず先頭に置く */
     int _pinNums[FRAME_ROLL_MAX];
     int _ballCount;
@@ -13,7 +13,6 @@ typedef struct {
 } StandardFrame;
 
 /* Frameモジュールから呼ばれるinterface実装関数*/
-static void tellNextFrame(Frame* frame, Frame* nextFrame);
 static void destroy(Frame* frame);
 static void addRoll(Frame* frame, int pinNum);
 static int score(const Frame* frame);
@@ -28,7 +27,6 @@ static bool isSpare(const StandardFrame* frame);
 static int sumOfAllPins(const StandardFrame* frame);
 
 static FrameInterface finalFrameFuncTable = {
-    tellNextFrame,
     destroy,
     addRoll,
     score,
@@ -44,7 +42,7 @@ Frame* StandardFrame_Create(void)
     return (Frame*)frame;
 }
 
-static void tellNextFrame(Frame* frame, Frame* nextFrame)
+void StandardFrame_TellNextFrame(StandardFrame* frame, Frame* nextFrame)
 {
     StandardFrame* standardFrame = (StandardFrame*)frame;
     standardFrame->_nextFrame = nextFrame;

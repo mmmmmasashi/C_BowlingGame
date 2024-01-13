@@ -1,11 +1,6 @@
 #include <stddef.h>
 #include "Frame.h"
 
-void Frame_TellNextFrame(Frame* frame, Frame* nextFrame)
-{
-    frame->_funcTable->TellNextFrame(frame, nextFrame);
-}
-
 void Frame_Destroy(Frame* frame)
 {
     frame->_funcTable->Destroy(frame);
