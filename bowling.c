@@ -14,30 +14,37 @@ static int _pinNumTableOfLast[ROLL_IN_LAST_FRAME];               // 最終フレ
 static int _countOfFinishedFrame = 0;
 static int _countOfRollInFrame = 0;
 
-static bool IsStrikeAt(int frameIdx);
-static bool IsSpareAt(int frameIdx);
+static void updateGameProgress();
+static void goNextFrame();
 
-static bool IsLastFrameFinished();
+static bool isStrikeAt(int frameIdx);
+static bool isSpareAt(int frameIdx);
 
-static int ScoreOfFrame(int frameIdx);
-static int ScoreOfNormalFrame(int frameIdx);
-static int ScoreOfLastFrame();
+static bool IsNormalFrameFinished();
+static bool isLastFrameFinished();
 
-static int GetPinNumOf(int frameIdx, int rollIdx);
-static void SetPinNum(int pinNum);
+static int scoreFrame(int frameIdx);
+static int scoreNormalFrame(int frameIdx);
+static int scoreLastFrame();
+static int calcStrikeBonusOfNormalFrame(int frameIdx);
 
-static void UpdateGameProgress();
-static void GoNextFrame();
-static bool IsLastFrame(int frameIdx);
+static int getPinNumOf(int frameIdx, int rollIdx);
+static void recordPinNum(int pinNum);
+
+
+static bool isLastFrame(int frameIdx);
 
 void Game_Init(void)
 {
     _countOfFinishedFrame = 0;
     _countOfRollInFrame = 0;
-    for (int i = 0; i < NORMAL_FRAME_NUM; i++)
+    
+    for (int frameIdx = 0; frameIdx < NORMAL_FRAME_NUM; frameIdx++)
     {
-        _pinNumTable[i][0] = 0;
-        _pinNumTable[i][1] = 0;
+        for (int rollIdx = 0; rollIdx < ROLL_IN_NORMAL_FRAME; rollIdx++)
+        {
+            _pinNumTable[frameIdx][rollIdx] = 0;
+        }
     }
 
     for (int i = 0; i < ROLL_IN_LAST_FRAME; i++)
@@ -48,8 +55,8 @@ void Game_Init(void)
 
 void Game_Roll(int pinNum)
 {
-    SetPinNum(pinNum);
-    UpdateGameProgress();
+    recordPinNum(pinNum);
+    updateGameProgress();
 }
 
 int Game_Score(void)
@@ -57,61 +64,68 @@ int Game_Score(void)
     int totalScore = 0;
     for (int frameIdx = 0; frameIdx < FRAME_NUM; frameIdx++)
     {
-        totalScore += ScoreOfFrame(frameIdx);
+        totalScore += scoreFrame(frameIdx);
     }
 
     return totalScore;
 }
 
-static bool IsCurrentFrameFinished()
+static bool isCurrentFrameFinished()
 {
-    if (IsLastFrame(_countOfFinishedFrame))
+    if (isLastFrame(_countOfFinishedFrame))
     {
-        return IsLastFrameFinished();
+        return isLastFrameFinished();
     }
     else
     {
-        return IsStrikeAt(_countOfFinishedFrame) || _countOfRollInFrame == 2;
+        return IsNormalFrameFinished();
     }
 }
 
-static void UpdateGameProgress()
+static void updateGameProgress()
 {
     _countOfRollInFrame++;
 
-    if (IsCurrentFrameFinished())
+    if (isCurrentFrameFinished())
     {
-        GoNextFrame();
+        goNextFrame();
     }
 }
 
-static bool IsLastFrameFinished()
+static bool isLastFrameFinished()
 {
-    if (IsStrikeAt(IDX_OF_LAST_FRAME) || IsSpareAt(IDX_OF_LAST_FRAME))
+    if (!isLastFrame(_countOfFinishedFrame)) return false;
+    if (isStrikeAt(IDX_OF_LAST_FRAME) || isSpareAt(IDX_OF_LAST_FRAME))
         return _countOfRollInFrame == 3;
     
     return _countOfFinishedFrame == 2;
 }
 
-static void GoNextFrame()
+static bool IsNormalFrameFinished()
+{
+    return isStrikeAt(_countOfFinishedFrame) || _countOfRollInFrame == 2;
+}
+
+static void goNextFrame()
 {
     _countOfFinishedFrame++;
     _countOfRollInFrame = 0;
 }
 
 /// @brief フレーム/インデックスを抽象化した、ピン数へのアクセサ
-static int GetPinNumOf(int frameIdx, int rollIdx)
+static int getPinNumOf(int frameIdx, int rollIdx)
 {
-    if (IsLastFrame(frameIdx))
+    if (isLastFrame(frameIdx))
         return _pinNumTableOfLast[rollIdx];
     return _pinNumTable[frameIdx][rollIdx];
 }
 
-static void SetPinNum(int pinNum)
+static void recordPinNum(int pinNum)
 {
     int frameIdx = _countOfFinishedFrame;
     int rollIdx = _countOfRollInFrame;
-    if (IsLastFrame(frameIdx))
+
+    if (isLastFrame(frameIdx))
     {
         _pinNumTableOfLast[rollIdx] = pinNum;
     }
@@ -121,60 +135,65 @@ static void SetPinNum(int pinNum)
     }
 }
 
-static bool IsLastFrame(int frameIdx)
+static bool isLastFrame(int frameIdx)
 {
     int frameCount = frameIdx + 1;
     return frameCount == FRAME_NUM;
 }
 
-static bool IsStrikeAt(int frameIdx)
+static bool isStrikeAt(int frameIdx)
 {
-    return GetPinNumOf(frameIdx, 0) == PINS_IN_FRAME;
+    return getPinNumOf(frameIdx, 0) == PINS_IN_FRAME;
 }
 
-static bool IsSpareAt(int frameIdx)
+static bool isSpareAt(int frameIdx)
 {
-    if (IsStrikeAt(frameIdx))
+    if (isStrikeAt(frameIdx))
         return false;
 
-    return GetPinNumOf(frameIdx, 0) + GetPinNumOf(frameIdx, 1) == PINS_IN_FRAME;
+    return getPinNumOf(frameIdx, 0) + getPinNumOf(frameIdx, 1) == PINS_IN_FRAME;
 }
 
-static int ScoreOfFrame(int frameIdx)
+static int scoreFrame(int frameIdx)
 {
-    if (IsLastFrame(frameIdx))
-        return ScoreOfLastFrame();
+    if (isLastFrame(frameIdx))
+        return scoreLastFrame();
 
-    return ScoreOfNormalFrame(frameIdx);
+    return scoreNormalFrame(frameIdx);
 }
 
-static int ScoreOfNormalFrame(int frameIdx)
+static int calcStrikeBonusOfNormalFrame(int frameIdx)
+{
+    int nextFrameIdx = frameIdx + 1;
+    if (isStrikeAt(nextFrameIdx))
+    {
+        // 次フレームがStrikeの場合、更に次からボーナス用のピン数を取得する必要がある
+        return _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 2][0];
+    }
+    else
+    {
+        return _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 1][1];
+    }
+}
+
+static int scoreNormalFrame(int frameIdx)
 {
     int normalScore = _pinNumTable[frameIdx][0] + _pinNumTable[frameIdx][1];
-    int bonusScore = 0;
 
-    if (IsStrikeAt(frameIdx))
+    if (isStrikeAt(frameIdx))
     {
-        int nextFrameIdx = frameIdx + 1;
-        if (IsStrikeAt(nextFrameIdx))
-        {
-            // 次フレームがStrikeの場合、更に次からボーナス用のピン数を取得する必要がある
-            bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 2][0];
-        }
-        else
-        {
-            bonusScore = _pinNumTable[frameIdx + 1][0] + _pinNumTable[frameIdx + 1][1];
-        }
+        return normalScore + calcStrikeBonusOfNormalFrame(frameIdx);
+    }
+    else if (isSpareAt(frameIdx))
+    {
+        int spareBonus = _pinNumTable[frameIdx + 1][0];
+        return normalScore + spareBonus;
     }
 
-    else if (IsSpareAt(frameIdx))
-    {
-        bonusScore = _pinNumTable[frameIdx + 1][0];
-    }
-    return normalScore + bonusScore;
+    return normalScore;
 }
 
-static int ScoreOfLastFrame()
+static int scoreLastFrame()
 {
     int sumOfPins = 0;
     for (int i = 0; i < ROLL_IN_LAST_FRAME; i++)
