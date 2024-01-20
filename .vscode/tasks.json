@@ -35,7 +35,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "./UnitTest -c -v",
+            "command": "./UnitTest.exe -c",
             "dependsOn": "build-test",
             "group": {
                 "kind": "test",
